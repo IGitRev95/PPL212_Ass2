@@ -8,15 +8,23 @@
 (define append 
   (lambda(lst1 lst2)
       (if (empty? lst1)
-        (lst2)
+        lst2
         (cons (car lst1)(append (cdr lst1) lst2))                 
        )
    )
 )
 
+;; Signature: reverse(lst)
+;; Type: [ List(any) -> List(any)]
+;; Purpose: given a list return the items of the list as a list in a reversed order
+;; Pre-conditions: none
+;; Tests: (reverse '(0 1 2)) ==> '(2 1 0)
 (define reverse 
   (lambda (lst)
-        @TODO
+        (if (empty? lst)
+            '()
+            (append (reverse (cdr lst)) (cons (car lst) '()))
+        )
   )
 )
 
