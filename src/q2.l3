@@ -1,7 +1,17 @@
+#lang racket
+
+;; Signature: append(lst1,lst2)
+;; Type: [ List(any)*List(any) -> List(any)]
+;; Purpose: given 2 lists return a concatenation of both
+;; Pre-conditions: none
+;; Tests: (append '(0 1 2) '(3 4 5)) ==> '(0 1 2 3 4 5)
 (define append 
   (lambda(lst1 lst2)
-      @TODO
-  )
+      (if (empty? lst1)
+        (lst2)
+        (cons (car lst1)(append (cdr lst1) lst2))                 
+       )
+   )
 )
 
 (define reverse 
