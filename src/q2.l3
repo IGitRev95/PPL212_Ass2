@@ -1,5 +1,18 @@
 #lang racket
 
+
+;; Signature: empty?(lst)
+;; Type: [ List(any) -> boolean]
+;; Purpose: given a list returen if it's empty
+;; Pre-conditions: lst is a list
+;; Tests: (empty? '()) ==> #t
+;;        (empty? '(a)) ==> #f
+(define empty?
+  (lambda (lst)
+    (if (eq? lst '()) #t #f)
+   )
+)
+
 ;; Signature: append(lst1,lst2)
 ;; Type: [ List(any)*List(any) -> List(any)]
 ;; Purpose: given 2 lists return a concatenation of both
@@ -26,6 +39,22 @@
             (append (reverse (cdr lst)) (cons (car lst) '()))
         )
   )
+)
+
+;; Signature: duplicate-item(itm dup-count)
+;; Type: [ T1*Number -> List(T1)]
+;; Purpose: given a obj and a non-neg. number return a list in length of number
+;;           containig duplicates of the obj as it's elements
+;; Pre-conditions: dub-count>=0
+;; Tests: (duplicate-item 0 3) ==> '(0 0 0)
+;;        (duplicate-item 3 0) ==> '()
+(define duplicate-item
+   (lambda(itm dup-count)
+      (if (= dup-count 0)
+          '()
+          (append (cons itm '()) (duplicate-item itm (- dup-count 1)))
+      )
+   )
 )
 
 (define duplicate-items
