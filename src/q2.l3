@@ -58,7 +58,7 @@
 )
 
 ;; Signature: duplicate-items(lst dup-count)
-;; Type: [ List(any)*List(Number) -> List(any)]
+;; Type: [ List(Any)*List(Number) -> List(any)]
 ;; Purpose: given two lists - lst , dup-count - duplicates each item of
 ;;           lst according to the number defined in the same position in dup-count.
 ;;           In case dups-count length is smaller than lst,
@@ -92,7 +92,7 @@
 )
 
 ;; Signature: compose-n(f n)
-;; Type: [ [Number -> Number]*Number -> [Number -> Number] ]
+;; Type: [ (Number -> Number)*Number -> (Number -> Number) ]
 ;; Purpose: given an unary function - f - and a number - n - and
 ;;           returns the closure of the n-th self-composition of f
 ;; Pre-conditions: n>=0
