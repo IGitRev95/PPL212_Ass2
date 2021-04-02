@@ -87,7 +87,7 @@
 ;;        (payment 5 '(1 1 1 2 2 5 10) ==> 3
 (define payment
   (lambda (n coins-lst)
-        @TODO
+        (0)
   )
 )
 
@@ -112,6 +112,9 @@
 ;; Tests: ((compose-n (lambda (x) (* 2 x)) 3) 3) ==> 24
 (define compose-n
   (lambda( f n)
-        @TODO
+        (if (= n 1)
+            f
+            (lambda (x) (f ((compose-n f (- n 1)) x)))
+            )
   )
 )
