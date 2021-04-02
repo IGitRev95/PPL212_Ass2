@@ -91,6 +91,19 @@
   )
 )
 
+;;
+;(define payment
+;  (lambda(sum lst1 lst2)
+;    (if (> 0 sum) 0
+;    (if (= 0 sum) 1 
+;    (if (empty? lst1)
+;       0
+;      (if (= (car lst2) 0)
+;          (payment sum (cdr lst1) (cdr lst2))
+;          (+(payment sum (cdr lst1) (cdr lst2)) (payment (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
+;    ))))))
+;;
+
 ;; Signature: compose-n(f n)
 ;; Type: [ (Number -> Number)*Number -> (Number -> Number) ]
 ;; Purpose: given an unary function - f - and a number - n - and
