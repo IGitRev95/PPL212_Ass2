@@ -1,25 +1,13 @@
 #lang racket
 
 
-;; Signature: empty?(lst)
-;; Type: [ List(any) -> boolean]
-;; Purpose: given a list returen if it's empty
-;; Pre-conditions: lst is a list
-;; Tests: (empty? '()) ==> #t
-;;        (empty? '(a)) ==> #f
 (define empty?
   (lambda (lst)
     (if (eq? lst '()) #t #f)
    )
 )
 
-;;----------------------Q1-------------------------------------
 
-;; Signature: append(lst1,lst2)
-;; Type: [ List(any)*List(any) -> List(any)]
-;; Purpose: given 2 lists return a concatenation of both
-;; Pre-conditions: none
-;; Tests: (append '(0 1 2) '(3 4 5)) ==> '(0 1 2 3 4 5)
 (define append 
   (lambda(lst1 lst2)
       (if (empty? lst1)
@@ -29,13 +17,7 @@
    )
 )
 
-;;----------------------Q2-------------------------------------
 
-;; Signature: reverse(lst)
-;; Type: [ List(any) -> List(any)]
-;; Purpose: given a list return the items of the list as a list in a reversed order
-;; Pre-conditions: none
-;; Tests: (reverse '(0 1 2)) ==> '(2 1 0)
 (define reverse 
   (lambda (lst)
         (if (empty? lst)
@@ -45,15 +27,7 @@
   )
 )
 
-;;----------------------Q3-------------------------------------
 
-;; Signature: duplicate-item(itm dup-count)
-;; Type: [ T1*Number -> List(T1)]
-;; Purpose: given a obj and a non-neg. number return a list in length of number
-;;           containig duplicates of the obj as it's elements
-;; Pre-conditions: dub-count>=0
-;; Tests: (duplicate-item 0 3) ==> '(0 0 0)
-;;        (duplicate-item 3 0) ==> '()
 (define duplicate-item
    (lambda(itm dup-count)
       (if (= dup-count 0)
@@ -63,15 +37,7 @@
    )
 )
 
-;; Signature: duplicate-items(lst dup-count)
-;; Type: [ List(Any)*List(Number) -> List(any)]
-;; Purpose: given two lists - lst , dup-count - duplicates each item of
-;;           lst according to the number defined in the same position in dup-count.
-;;           In case dups-count length is smaller than lst,
-;;           dup-count is being treated as a cyclic list.
-;; Pre-conditions: (empty? dub-count) ==> #f
-;; Tests: (duplicate-items '(1 2 3) '(1 0)) ==> '(1 3)
-;;        (duplicate-items '(1 2 3) '(2 1 0 10 2)) ==> '(1 1 2)
+
 (define duplicate-items
    (lambda(lst dup-count)
       (if (empty? lst)
@@ -84,17 +50,7 @@
    )
 )
 
-;;----------------------Q4-------------------------------------
 
-;; Signature: find-and-add(symb lst-pair)
-;; Type: [ T1*List(Pair(T1*Number)) -> List(Pair(T1*Number)]
-;; Purpose: lst-pair - is a list of pairs which in every pair the left arg. is a given value
-;;           and the right arg. is an appereance counter. The function will increace the appereance
-;;           counter value of the given symbal and if there's none such, it will add a new pair
-;;           to the end of the list.
-;; Pre-conditions: None
-;; Tests: (find-and-add 2 '((1.3) (10.7))) ==> '((1.3) (10.7) (2.1))
-;;        (find-and-add 2 '((1.3) (10.7) (2.1))) ==> '((1.3) (10.7) (2.2))
 (define find-and-add
   (lambda (symb lst-pair)
     (if (empty? lst-pair)
@@ -107,12 +63,7 @@
     )
  )
 
-;; Signature: symbal-counter(lst)
-;; Type: [ List(T1) -> List(Pair(T1*Number)]
-;; Purpose: given a list - lst - of values returns a list of pairs which in every pair the left arg. is a given value from lst
-;;           and the right arg. is an appereance counter.
-;; Pre-conditions: None
-;; Tests: (symbal-counter '(1 1 1 2 2 5 10)) ==> '((10 . 1) (5 . 1) (2 . 2) (1 . 3))
+
 (define symbal-counter
   (lambda (lst)
     (if (empty? lst)
@@ -122,11 +73,7 @@
     )
   )
 
-;; Signature: get-vals(lst-pairs)
-;; Type: [ List(Pair(Any*Number)) -> List(Any)]
-;; Purpose: given a list of pairs - lst-pairs - returns a list of all the left side arguments of the pairs.
-;; Pre-conditions: None
-;; Tests: (get-vals  '((10 . 1) (5 . 1) (2 . 2) (1 . 3))) ==> '(10 5 2 1)
+)
 (define get-vals
   (lambda (lst-pairs)
     (if (empty? lst-pairs)
@@ -136,11 +83,7 @@
     )
  )
 
-;; Signature: get-quantities(lst-pairs)
-;; Type: [ List(Pair(Any*Number)) -> List(Number)]
-;; Purpose: given a list of pairs - lst-pairs - returns a list of all the right side arguments of the pairs.
-;; Pre-conditions: None
-;; Tests: (get-quantities  '((10 . 1) (5 . 1) (2 . 2) (1 . 3))) ==> '(1 1 2 3)
+
 (define get-quantities
   (lambda (lst-pairs)
     (if (empty? lst-pairs)
@@ -150,14 +93,7 @@
     )
  )
 
-;; Signature: payment-ext(sum lst1 lst2)
-;; Type: [ Number*List(Number)*List(Number) -> Number]
-;; Purpose: given a sum of money - sum - , list of available coins - lst1 - and
-;;           list of quantities of the given cois - lst2 - returns the number of
-;;           possible ways to pay the money with these coins.
-;; Pre-conditions: None
-;; Tests: (payment-ext 10 '(10 5) '(1 2)) ==> 2
-;;        (payment-ext 5 '(10 5 2 1) '(1 1 2 3)) ==> 3
+
 (define payment-ext
   (lambda(sum lst1 lst2)
     (if (> 0 sum) 0
@@ -172,27 +108,14 @@
  )
 
 
-;; Signature: payment(n coins-lst)
-;; Type: [ Number*List(Number) -> Number]
-;; Purpose: given a sum of money - n - and list of available coins - coins-lst -, and
-;;           returns the number of possible ways to pay the money with these coins.
-;; Pre-conditions: None
-;; Tests: (payment 10 '(5 5 10)) ==> 2
-;;        (payment 5 '(1 1 1 2 2 5 10)) ==> 3
+
 (define payment
   (lambda (n coins-lst)
         (payment-ext n (get-vals (symbal-counter coins-lst)) (get-quantities (symbal-counter coins-lst)))
   )
 )
 
-;;----------------------Q5-------------------------------------
 
-;; Signature: compose-n(f n)
-;; Type: [ (Number -> Number)*Number -> (Number -> Number) ]
-;; Purpose: given an unary function - f - and a number - n - and
-;;           returns the closure of the n-th self-composition of f
-;; Pre-conditions: n>=0
-;; Tests: ((compose-n (lambda (x) (* 2 x)) 3) 3) ==> 24
 (define compose-n
   (lambda( f n)
         (if (= n 1)
