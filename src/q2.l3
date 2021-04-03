@@ -13,6 +13,8 @@
    )
 )
 
+;;----------------------Q1-------------------------------------
+
 ;; Signature: append(lst1,lst2)
 ;; Type: [ List(any)*List(any) -> List(any)]
 ;; Purpose: given 2 lists return a concatenation of both
@@ -27,6 +29,8 @@
    )
 )
 
+;;----------------------Q2-------------------------------------
+
 ;; Signature: reverse(lst)
 ;; Type: [ List(any) -> List(any)]
 ;; Purpose: given a list return the items of the list as a list in a reversed order
@@ -40,6 +44,8 @@
         )
   )
 )
+
+;;----------------------Q3-------------------------------------
 
 ;; Signature: duplicate-item(itm dup-count)
 ;; Type: [ T1*Number -> List(T1)]
@@ -78,6 +84,29 @@
    )
 )
 
+;;----------------------Q4-------------------------------------
+
+;; Signature: find-and-add(symb lst-pair)
+;; Type: [ T1*List(Pair(T1*Number) -> List(Pair(T1*Number)]
+;; Purpose: lst-pair - is a list of pairs which in every pair the left arg is a given value
+;;           and the right arg. is an appereance counter. The function will increace the appereance
+;;           counter value of the given symbal and if there's none such, it will add a new pair
+;;           to the end of the list.
+;; Pre-conditions: None
+;; Tests: (find-and-add 2 '((1.3) (10.7))) ==> '((1.3) (10.7) (2.1))
+;;        (find-and-add 2 '((1.3) (10.7) (2.1))) ==> '((1.3) (10.7) (2.2))
+(define find-and-add
+  (lambda (symb lst-pair)
+    (if (empty? lst-pair)
+        (append lst-pair (list (cons symb 1)))
+        (if (= (caar lst-pair) symb)
+            (cons (cons symb (+ 1 (cdar lst-pair))) (cdr lst-pair))
+            (cons (car lst-pair) (find-and-add symb (cdr lst-pair)))
+            )
+        )
+    )
+ )
+
 ;; Signature: payment(n coins-lst)
 ;; Type: [ Number*List(Number) -> Number]
 ;; Purpose: given a sum of money - n - and list of available coins - coins-lst -, and
@@ -103,6 +132,8 @@
 ;          (+(payment sum (cdr lst1) (cdr lst2)) (payment (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
 ;    ))))))
 ;;
+
+;;----------------------Q5-------------------------------------
 
 ;; Signature: compose-n(f n)
 ;; Type: [ (Number -> Number)*Number -> (Number -> Number) ]
