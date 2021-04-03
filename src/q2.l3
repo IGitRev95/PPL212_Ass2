@@ -150,6 +150,27 @@
     )
  )
 
+;; Signature: payment-ext(sum lst1 lst2)
+;; Type: [ Number*List(Number)*List(Number) -> Number]
+;; Purpose: given a sum of money - sum - , list of available coins - lst1 - and
+;;           list of quantities of the given cois - lst2 - returns the number of
+;;           possible ways to pay the money with these coins.
+;; Pre-conditions: None
+;; Tests: (payment-ext 10 '(10 5) '(1 2)) ==> 2
+;;        (payment-ext 5 '(10 5 2 1) '(1 1 2 3)) ==> 3
+(define payment-ext
+  (lambda(sum lst1 lst2)
+    (if (> 0 sum) 0
+    (if (= 0 sum) 1 
+    (if (empty? lst1)
+       0
+      (if (= (car lst2) 0)
+          (payment-ext sum (cdr lst1) (cdr lst2))
+          (+(payment-ext sum (cdr lst1) (cdr lst2)) (payment-ext (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
+    ))))
+  )
+ )
+
 
 ;; Signature: payment(n coins-lst)
 ;; Type: [ Number*List(Number) -> Number]
@@ -157,25 +178,12 @@
 ;;           returns the number of possible ways to pay the money with these coins.
 ;; Pre-conditions: None
 ;; Tests: (payment 10 '(5 5 10)) ==> 2
-;;        (payment 5 '(1 1 1 2 2 5 10) ==> 3
+;;        (payment 5 '(1 1 1 2 2 5 10)) ==> 3
 (define payment
   (lambda (n coins-lst)
-        (0)
+        (payment-ext n (get-vals (symbal-counter coins-lst)) (get-quantities (symbal-counter coins-lst)))
   )
 )
-
-;;
-;(define payment
-;  (lambda(sum lst1 lst2)
-;    (if (> 0 sum) 0
-;    (if (= 0 sum) 1 
-;    (if (empty? lst1)
-;       0
-;      (if (= (car lst2) 0)
-;          (payment sum (cdr lst1) (cdr lst2))
-;          (+(payment sum (cdr lst1) (cdr lst2)) (payment (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
-;    ))))))
-;;
 
 ;;----------------------Q5-------------------------------------
 
