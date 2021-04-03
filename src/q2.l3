@@ -122,6 +122,35 @@
     )
   )
 
+;; Signature: get-vals(lst-pairs)
+;; Type: [ List(Pair(Any*Number)) -> List(Any)]
+;; Purpose: given a list of pairs - lst-pairs - returns a list of all the left side arguments of the pairs.
+;; Pre-conditions: None
+;; Tests: (get-vals  '((10 . 1) (5 . 1) (2 . 2) (1 . 3))) ==> '(10 5 2 1)
+(define get-vals
+  (lambda (lst-pairs)
+    (if (empty? lst-pairs)
+        '()
+        (cons (caar lst-pairs) (get-vals (cdr lst-pairs)))
+        )
+    )
+ )
+
+;; Signature: get-quantities(lst-pairs)
+;; Type: [ List(Pair(Any*Number)) -> List(Number)]
+;; Purpose: given a list of pairs - lst-pairs - returns a list of all the right side arguments of the pairs.
+;; Pre-conditions: None
+;; Tests: (get-quantities  '((10 . 1) (5 . 1) (2 . 2) (1 . 3))) ==> '(1 1 2 3)
+(define get-quantities
+  (lambda (lst-pairs)
+    (if (empty? lst-pairs)
+        '()
+        (cons (cdar lst-pairs) (get-quantities (cdr lst-pairs)))
+        )
+    )
+ )
+
+
 ;; Signature: payment(n coins-lst)
 ;; Type: [ Number*List(Number) -> Number]
 ;; Purpose: given a sum of money - n - and list of available coins - coins-lst -, and
