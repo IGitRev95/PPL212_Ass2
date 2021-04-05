@@ -1,22 +1,17 @@
-#lang racket
-
-
 (define empty?
   (lambda (lst)
     (if (eq? lst '()) #t #f)
    )
 )
 
-
 (define append 
   (lambda(lst1 lst2)
       (if (empty? lst1)
         lst2
         (cons (car lst1)(append (cdr lst1) lst2))                 
-       )
+      )
    )
 )
-
 
 (define reverse 
   (lambda (lst)
@@ -27,7 +22,6 @@
   )
 )
 
-
 (define duplicate-item
    (lambda(itm dup-count)
       (if (= dup-count 0)
@@ -36,7 +30,6 @@
       )
    )
 )
-
 
 (define duplicate-items
    (lambda(lst dup-count)
@@ -50,19 +43,17 @@
    )
 )
 
-
 (define find-and-add
   (lambda (symb lst-pair)
     (if (empty? lst-pair)
         (append lst-pair (list (cons symb 1)))
-        (if (= (caar lst-pair) symb)
-            (cons (cons symb (+ 1 (cdar lst-pair))) (cdr lst-pair))
+        (if (= (car (car lst-pair)) symb)
+            (cons (cons symb (+ 1 (cdr (car lst-pair)))) (cdr lst-pair))
             (cons (car lst-pair) (find-and-add symb (cdr lst-pair)))
             )
         )
     )
  )
-
 
 (define symbal-counter
   (lambda (lst)
@@ -73,26 +64,25 @@
     )
   )
 
-)
+
+
 (define get-vals
   (lambda (lst-pairs)
     (if (empty? lst-pairs)
         '()
-        (cons (caar lst-pairs) (get-vals (cdr lst-pairs)))
+        (cons (car (car lst-pairs)) (get-vals (cdr lst-pairs)))
         )
     )
- )
-
+)
 
 (define get-quantities
   (lambda (lst-pairs)
     (if (empty? lst-pairs)
         '()
-        (cons (cdar lst-pairs) (get-quantities (cdr lst-pairs)))
-        )
+        (cons (cdr (car lst-pairs)) (get-quantities (cdr lst-pairs)))
     )
- )
-
+  )
+)
 
 (define payment-ext
   (lambda(sum lst1 lst2)
@@ -103,24 +93,24 @@
       (if (= (car lst2) 0)
           (payment-ext sum (cdr lst1) (cdr lst2))
           (+(payment-ext sum (cdr lst1) (cdr lst2)) (payment-ext (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
-    ))))
-  )
- )
-
-
-
-(define payment
-  (lambda (n coins-lst)
-        (payment-ext n (get-vals (symbal-counter coins-lst)) (get-quantities (symbal-counter coins-lst)))
+      )
+    )
+    )
+    )
   )
 )
 
+(define payment
+  (lambda (n coins-lst)
+    (payment-ext n (get-vals (symbal-counter coins-lst)) (get-quantities (symbal-counter coins-lst)))
+  )
+)
 
 (define compose-n
   (lambda( f n)
         (if (= n 1)
-            f
-            (lambda (x) (f ((compose-n f (- n 1)) x)))
-            )
+          f
+          (lambda (x) (f ((compose-n f (- n 1)) x)))
+        )
   )
 )
