@@ -43,66 +43,27 @@
    )
 )
 
-(define find-and-add
-  (lambda (symb lst-pair)
-    (if (empty? lst-pair)
-        (append lst-pair (list (cons symb 1)))
-        (if (= (car (car lst-pair)) symb)
-            (cons (cons symb (+ 1 (cdr (car lst-pair)))) (cdr lst-pair))
-            (cons (car lst-pair) (find-and-add symb (cdr lst-pair)))
-            )
-        )
-    )
- )
-
-(define symbal-counter
-  (lambda (lst)
+(define cut
+  (lambda (lst num)
     (if (empty? lst)
-        '()
-        (find-and-add (car lst) (symbal-counter (cdr lst)))
-        )
-    )
-  )
-
-
-
-(define get-vals
-  (lambda (lst-pairs)
-    (if (empty? lst-pairs)
-        '()
-        (cons (car (car lst-pairs)) (get-vals (cdr lst-pairs)))
-        )
-    )
-)
-
-(define get-quantities
-  (lambda (lst-pairs)
-    (if (empty? lst-pairs)
-        '()
-        (cons (cdr (car lst-pairs)) (get-quantities (cdr lst-pairs)))
+      lst
+      (if (= (car lst) num)
+        (cut (cdr lst) num)
+        lst
+      )
     )
   )
 )
 
-(define payment-ext
-  (lambda(sum lst1 lst2)
+
+(define payment
+  (lambda (sum lst1)
     (if (> 0 sum) 0
     (if (= 0 sum) 1 
     (if (empty? lst1)
-       0
-      (if (= (car lst2) 0)
-          (payment-ext sum (cdr lst1) (cdr lst2))
-          (+(payment-ext sum (cdr lst1) (cdr lst2)) (payment-ext (- sum (car lst1)) lst1 (cons (-(car lst2) 1) (cdr lst2)))) 
-      )
-    )
-    )
-    )
-  )
-)
-
-(define payment
-  (lambda (n coins-lst)
-    (payment-ext n (get-vals (symbal-counter coins-lst)) (get-quantities (symbal-counter coins-lst)))
+      0
+      (+ (payment sum (cut lst1 (car lst1))) (payment (- sum (car lst1)) (cdr lst1))) 
+    )))
   )
 )
 
