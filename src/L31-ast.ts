@@ -250,7 +250,7 @@ const parseLetExp = (bindings: Sexp, body: Sexp[]): Result<LetExp> => {
         (bindingsResult, mapResult(parseL31CExp, body));
 }
 
-const parseClassExp = (fields_VarDecl: Sexp, methods_Binding: Sexp): Result<LetExp> => {
+const parseClassExp = (fields_VarDecl: Sexp, methods_Binding: Sexp): Result<LetExp> => { //fields_VarDecl shoud be an array of var_dec_exp
     if (!(methods_Binding.length === 0) ) {
         return makeFailure('Malformed bindings in "class" expression');
     }
