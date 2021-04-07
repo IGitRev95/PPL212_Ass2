@@ -1,4 +1,4 @@
-(define empty?
+(define empty? 
   (lambda (lst)
     (if (eq? lst '()) #t #f)
    )
@@ -55,17 +55,53 @@
   )
 )
 
-
-(define payment
-  (lambda (sum lst1)
+(define paymentsorted
+   (lambda (sum lst)
     (if (> 0 sum) 0
     (if (= 0 sum) 1 
-    (if (empty? lst1)
-      0
-      (+ (payment sum (cut lst1 (car lst1))) (payment (- sum (car lst1)) (cdr lst1))) 
-    )))
+    (if (empty? lst)
+       0
+       (+ (payment sum (cut lst (car lst))) (payment (- sum (car lst)) (cdr lst))) 
+     )
+    )
+   )
+  )
+ )
+
+(define max
+  (lambda (lst cmax)
+    (if (empty? lst) cmax
+    (if (< cmax (car lst)) (max (cdr lst) (car lst))
+        (max (cdr lst) cmax))
+     )
+   )
+ ) 
+
+(define remove
+  (lambda (lst rem)
+     (if (empty? lst)
+      '()
+       (if (= (car lst) rem)
+          (cdr lst)
+          (append (cons (car lst) '()) (remove (cdr lst) rem)))
+     )
   )
 )
+
+(define sort
+  (lambda (lst)
+   (if (empty? lst)
+       '()
+       (append (sort (remove lst (max lst 0))) (cons (max lst 0) '()))
+   )
+  )
+ )
+
+(define payment
+  (lambda (sum lst)
+    (paymentsorted sum (sort lst))
+   )
+ )
 
 (define compose-n
   (lambda( f n)
