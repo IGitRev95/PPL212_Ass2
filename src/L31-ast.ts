@@ -348,5 +348,8 @@ export const unparseL31 = (exp: Program | Exp): string =>
     isLetExp(exp) ? unparseLetExp(exp) :
     isDefineExp(exp) ? `(define ${exp.var.var} ${unparseL31(exp.val)})` :
     isProgram(exp) ? `(L31 ${unparseLExps(exp.exps)})` :
-    isClassExp(exp) ? `(class ${})` : //TODO
+    isClassExp(exp) ? unparseClassExp(exp) : //TODO
     exp;
+
+    const unparseClassExp = (cls: ClassExp) : string => 
+    `(class (${map((p: VarDecl) => p.var, cls.fields).join(" ")}) (${map((b: Binding) => `(${b.var.var} ${unparseL31(b.val)})`, cls.methods).join(" ")})}))`
