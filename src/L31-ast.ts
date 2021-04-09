@@ -33,7 +33,7 @@ import { Sexp, Token } from "s-expression";
 ;;         |  ( let ( binding* ) <cexp>+ )  / LetExp(bindings:Binding[], body:CExp[]))
 ;;         |  ( quote <sexp> )              / LitExp(val:SExp)
 ;;         |  ( <cexp> <cexp>* )            / AppExp(operator:CExp, operands:CExp[]))
-;;         | ( class ( <var>+ ) ( <binding>+ ) ) / ClassExp(fields:VarDecl[], methods:Binding[]))  ###L31
+;;         |  ( class ( <var>+ ) ( <binding>+ ) ) / ClassExp(fields:VarDecl[], methods:Binding[]))  ###L31
 ;; <binding>  ::= ( <var> <cexp> )           / Binding(var:VarDecl, val:Cexp)
 ;; <prim-op>  ::= + | - | * | / | < | > | = | not |  and | or | eq? | string=?
 ;;                  | cons | car | cdr | pair? | number? | list 
@@ -177,7 +177,7 @@ export const parseL31SpecialForm = (op: Sexp, params: Sexp[]): Result<CExp> =>
     op === "lambda" ? parseProcExp(first(params), rest(params)) :
     op === "let" ? parseLetExp(first(params), rest(params)) :
     op === "quote" ? parseLitExp(first(params)) :
-    op === "class" ? parseClassExp((first(params), rest(params))) : //TODO
+    op === "class" ? parseClassExp(first(params), rest(params)) : //TODO
     makeFailure("Never");
 
 // DefineExp -> (define <varDecl> <CExp>)
@@ -250,21 +250,38 @@ const parseLetExp = (bindings: Sexp, body: Sexp[]): Result<LetExp> => {
         (bindingsResult, mapResult(parseL31CExp, body));
 }
 
-const parseClassExp = (fields_VarDecl: Sexp, methods_Binding: Sexp): Result<LetExp> => { //fields_VarDecl shoud be an array of var_dec_exp
-    if (!(methods_Binding.length === 0) ) {
-        return makeFailure('Malformed bindings in "class" expression');
+// cheking that var_decls is an array of Identifiers
+const isGoodVardecls = (var_decls: Sexp): var_decls is string[] =>
+    isArray(var_decls) &&
+    allT(isIdentifier, var_decls);
+
+const parseClassExp = (fields_VarDecls: Sexp, methods_Binding: Sexp): Result<ClassExp> => { //fields_VarDecl shoud be an array of var_dec_exp
+    // checking for non-empty arguments
+    if(fields_VarDecls==="" || isEmpty(fields_VarDecls)){
+     return makeFailure('"class" expression missing "fields" arguments');
+    }
+    if(methods_Binding==="" || isEmpty(methods_Binding)){
+        return makeFailure('"class" expression missing "methods" arguments');
+    }
+    // checking for valid syntax structure of arguments
+    if (!isGoodVardecls(fields_VarDecls)) {
+        return makeFailure('Malformed fields in "class" expression');
     }
     if (!isGoodBindings(methods_Binding) ) {
         return makeFailure('Malformed bindings in "class" expression');
     }
-    const vars = map(b => b[0], methods_Binding);  // [string]  binding [[string,Sexp]+]
+    // methodes parsing
+    const methodes_names = map(b => b[0], methods_Binding);  // [string]  binding [[string,Sexp]+]
+    const methodes_valsResult = mapResult(binding => parseL31CExp(second(binding)), methods_Binding); //Result<procExp[]>
+    const methodes_BindingsResult = bind(methodes_valsResult, (vals: CExp[]) => makeOk(zipWith(makeBinding, methodes_names, vals))); // Result< CEXP[] => CEXP[][]>
     
-    const valsResult = mapResult(binding => parseL31CExp(second(methods_Binding)), methods_Binding); //Result<procExp[]>
+    // fields parsing
+    const fields_decls = mapResult(fild_dec => parseL31CExp(fild_dec), fields_VarDecls); // parse the fields names to an array of string tokens
+    const fields_BindingsResult = bind(fields_decls, (vals: CExp[]) => makeOk(zipWith(makeVarDecl, fields_VarDecls, vals))); // create an array of vardecl from the fields names
     
-    const bindingsResult = bind(valsResult, (vals: CExp[]) => makeOk(zipWith(makeBinding, vars, vals))); // Result< CEXP[] => CEXP[][]>
-    
-    return safe2((methods_Binding: Binding[], body: CExp[]) => makeOk(makeLetExp(methods_Binding, body)))
-        (bindingsResult, mapResult(parseL31CExp, body));
+    //combine the 2 results of fields and methods to a result of ClassExp
+    return safe2((fildes: VarDecl[], methods: Binding[]) => makeOk(makeClassExp(fildes, methods)))
+        (fields_BindingsResult, methodes_BindingsResult);
 }
 
 // sexps has the shape (quote <sexp>)
