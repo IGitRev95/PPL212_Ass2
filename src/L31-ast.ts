@@ -177,7 +177,7 @@ export const parseL31SpecialForm = (op: Sexp, params: Sexp[]): Result<CExp> =>
     op === "lambda" ? parseProcExp(first(params), rest(params)) :
     op === "let" ? parseLetExp(first(params), rest(params)) :
     op === "quote" ? parseLitExp(first(params)) :
-    op === "class" ? parseClassExp(first(params), rest(params)) : //TODO
+    op === "class" ? parseClassExp(first(params), second(params)) :
     makeFailure("Never");
 
 // DefineExp -> (define <varDecl> <CExp>)
@@ -348,8 +348,10 @@ export const unparseL31 = (exp: Program | Exp): string =>
     isLetExp(exp) ? unparseLetExp(exp) :
     isDefineExp(exp) ? `(define ${exp.var.var} ${unparseL31(exp.val)})` :
     isProgram(exp) ? `(L31 ${unparseLExps(exp.exps)})` :
-    isClassExp(exp) ? unparseClassExp(exp) : //TODO
+    isClassExp(exp) ? unparseClassExp(exp) : 
     exp;
+    
 
     const unparseClassExp = (cls: ClassExp) : string => 
-    `(class (${map((p: VarDecl) => p.var, cls.fields).join(" ")}) (${map((b: Binding) => `(${b.var.var} ${unparseL31(b.val)})`, cls.methods).join(" ")})}))`
+    // return the classExp as string , V-make string of fields(VarDecl[])-V , V-make string of methodes(Binding[])-V
+    `(class (${map((p: VarDecl) => p.var, cls.fields).join(" ")}) (${map((b: Binding) => `(${b.var.var} ${unparseL31(b.val)})`, cls.methods).join(" ")}))`
