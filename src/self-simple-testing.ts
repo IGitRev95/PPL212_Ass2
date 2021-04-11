@@ -7,10 +7,10 @@ import { parse as p } from "../shared/parser";
 
 
 //console.log(JSON.stringify(bind(p(`(lambda(x) 5)`),parseL31Exp), null, 2));
-const x = bind(p(`(class (a b) ((first (lambda () a)) (second (lambda () b)) (sum (lambda () (+ a b)))))`), parseL31Exp);
-console.log(`x: ${JSON.stringify(x, null, 2)}`);
-console.log(``);
-isOk(x)? isClassExp(x.value)? console.log(JSON.stringify(class2proc(x.value), null, 2)) : console.log("no2") : console.log("no1");
+const x = bind(p(`(let ((x (class (a b) ((first (lambda () a)) (second (lambda () b)) (sum (lambda () (+ a b))))))))`), parseL31Exp);
+//console.log(`x: ${JSON.stringify(x, null, 2)}`);
+//console.log(``);
+isOk(x)? isClassExp(x.value)? console.log(JSON.stringify(class2proc(x.value), null, 2)) : console.log(`no2: x is not of classExp:\n  ${JSON.stringify(L31ToL3(x.value), null, 2)}`) : console.log(`no1: x is not Ok:\n  ${JSON.stringify(x, null, 2)}`);
 //console.log(bind(unparseL31(x),)
 
 
